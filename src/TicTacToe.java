@@ -49,6 +49,20 @@ public class TicTacToe extends JComponent{
             field[i][j] = isXturn ? FIELD_X : FIELD_O;
             isXturn = !isXturn;
             repaint();
+            int res = checkState();
+            if(res != 0){
+                if(res == FIELD_O * 3){
+                    JOptionPane.showMessageDialog(this,"Нолики выиграли!","Победа",JOptionPane.INFORMATION_MESSAGE);
+                } else if(res == FIELD_X * 3){
+                    JOptionPane.showMessageDialog(this,"Крестики выиграли!","Победа",JOptionPane.INFORMATION_MESSAGE);
+                } else{
+                    JOptionPane.showMessageDialog(this,"Ничья","Ничья",JOptionPane.INFORMATION_MESSAGE);
+                }
+
+                initGame();
+
+                repaint();
+            }
         }
     }
 
@@ -88,6 +102,45 @@ public class TicTacToe extends JComponent{
         graphics.clearRect(0,0,getWidth(), getHeight());
         drawGrid(graphics);
         drawXO(graphics);
+    }
+
+    int checkState(){
+        int diag = 0;
+        int diag2 = 0;
+        for(int i = 0; i < 3; i++){
+            diag += field[i][i];
+            diag += field[i][2 - i];
+        }
+
+        if(diag == FIELD_O * 3 || diag == FIELD_X * 3) {return diag;}
+        if(diag2 == FIELD_O * 3 || diag2 == FIELD_X * 3) {return diag2;}
+
+        int check_i, check_j;
+        boolean hasEmpty = false;
+
+        for(int i = 0; i < 3; i++){
+            check_i = 0;
+            check_j = 0;
+            for(int j = 0; j < 3; j++){
+                if(field[i][j] == 0){
+                    hasEmpty = true;
+                }
+                check_i += field[i][j];
+                check_j += field[j][i];
+            }
+
+            if(check_i == FIELD_O * 3 || check_i == FIELD_X * 3){
+                return check_i;
+            }
+            if (check_j == FIELD_O * 3 || check_j == FIELD_X * 3){
+                return check_j;
+            }
+        }
+        if(hasEmpty){
+            return  0;
+        } else{
+            return  -1;
+        }
     }
 
 
